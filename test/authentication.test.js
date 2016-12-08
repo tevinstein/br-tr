@@ -6,6 +6,8 @@ const model = require('../models')
 const user = models.User
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const urlApi = 'http://localhost:3000/api'
+
 
 
 chai.use(chaiHttp);
@@ -59,7 +61,7 @@ describe('Find User (Login case) direct to database and make sure a token from l
             avatar: auth_user.avatar
         }, process.env.SECRET, {expiresIn: '1h'})
         console.log('login token created : ', token);
-        expect(auth_user).to.not.be.null
+        expect(auth_user).to.not.be.undefined
         expect(auth_user.username).to.be.equal('user_testing_login')
         expect(auth_user.email).to.be.equal('user_testing_login@testing.com')
         expect(auth_user.password).to.not.equal('userpassword')
@@ -70,3 +72,98 @@ describe('Find User (Login case) direct to database and make sure a token from l
     })
   })
 })
+
+describe('Create new User (register case) via route "/auth/register" to database ', function() {
+    it('expect to make sure a token is generated and token is not undefined', function(done) {
+        chai.request(urlApi)
+            .post('/auth/register')
+            .send({
+              username: 'user_testing_route_register',
+              email: 'user_testing_route_register@testing.com',
+              password: crypto.createHash('md5').update('userpassword').digest("hex"),
+              avatar: 'http://dummy-avatar-image.com'
+            })
+            .end(function(req, res) {
+              expect(res.body).to.exist
+              expect(res.body).to.not.be.undefined
+              done()
+            })
+    })
+})
+
+describe('Create new User (register case fail) via route "/auth/register" to database ', function() {
+    it('expect to make sure a token is generated and token is not undefined', function(done) {
+        chai.request(urlApi)
+            .post('/auth/register')
+            .send({
+              username: 'user_testing_route_register_fail',
+              email: 'user_testing_route_register_failtestingdotcom',
+              password: crypto.createHash('md5').update('userpasswordfail').digest("hex"),
+              avatar: 'http://dummy-avatar-image.com'
+            })
+            .end(function(req, res) {
+              expect(res.body).to.be.undefined
+              done()
+            })
+    })
+})
+
+
+describe('Find User (login success case) via route "/auth/login" from database ', function() {
+    it('expect to make sure a token is generated and token is not undefined', function(done) {
+      user.create({
+        username: 'user_testing_route_login',
+        email: 'user_testing_route_login@testing.com',
+        password: crypto.createHash('md5').update('userpassword').digest("hex"),
+        avatar: 'http://dummy-avatar-image.com'
+      }).then((data) => {
+        chai.request(urlApi)
+            .post('/auth/login')
+            .send({
+              username: 'user_testing_route_login',
+              password: crypto.createHash('md5').update('userpassword').digest("hex")
+            })
+            .end(function(req, res) {
+              expect(res.body).to.exist
+              expect(res.body).to.not.be.undefined
+              done()
+            })
+        })
+    })
+})
+
+describe('Find User (login fail case) via route "/auth/login" from database ', function() {
+    it('expect to make sure a token is undefined', function(done) {
+      user.create({
+        username: 'user_testing_route_login_fail',
+        email: 'user_testing_route_login_fail@testing.com',
+        password: crypto.createHash('md5').update('userpasswordfail').digest("hex"),
+        avatar: 'http://dummy-avatar-image.com'
+      }).then((data) => {
+        chai.request(urlApi)
+            .post('/auth/login')
+            .send({
+              username: 'user_testing_route_login_success',
+              password: crypto.createHash('md5').update('userpasswordsuccess').digest("hex")
+            })
+            .end(function(req, res) {
+              expect(res.body).to.be.undefined
+              done()
+            })
+        })
+    })
+})
+
+
+
+
+
+
+// expect(res.body).to.have.property('username')
+// expect(res.body).to.have.property('email')
+// expect(res.body).to.have.property('password')
+// expect(res.body).to.have.property('avatar')
+// expect(res.body.username).to.be.equal('user_testing_route_register')
+// expect(res.body.email).to.be.equal('user_testing_route_register@testing.com')
+// expect(res.body.password).to.not.equal('userpassword')
+// expect(res.body.avatar).to.be.equal('http://dummy-avatar-image.com')
