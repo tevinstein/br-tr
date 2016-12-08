@@ -19,6 +19,16 @@ var new_item = {
     status: 'Up for barter'
 }
 
+var updated_item = {
+    name: 'Bee Gees Shirt',
+    description: 'Only used for 2 months.',
+    dimension: 'L',
+    material: 'cotton',
+    photo: 'http://i.imgur.com/tg8ylqw.jpg',
+    color: 'Black',
+    status: 'Bartered'
+}
+
 describe("Items", function() {
     beforeEach(function(done) {
         Item.destroy({
@@ -101,15 +111,7 @@ describe("Items", function() {
     describe("Update An Item", () => {
         it('it should UPDATE an item', (done) => {
             Item.create(new_item).then((data) => {
-                Item.update({
-                    name: 'Bee Gees Shirt',
-                    description: 'Only used for 2 months.',
-                    dimension: 'L',
-                    material: 'cotton',
-                    photo: 'http://i.imgur.com/tg8ylqw.jpg',
-                    color: 'Black',
-                    status: 'Up for barter'
-                }, {
+                Item.update(updated_item, {
                     where: {
                         id: data.id
                     }
@@ -122,7 +124,7 @@ describe("Items", function() {
                         expect(data.name).to.equal('Bee Gees Shirt')
                         expect(data.material).to.equal('cotton')
                         expect(data.color).to.equal('Black')
-                        expect(data.status).to.equal('Up for barter')
+                        expect(data.status).to.equal('Bartered')
                         expect(data.description).to.equal('Only used for 2 months.')
                         expect(data.dimension).to.equal('L')
                         done()
@@ -230,62 +232,42 @@ describe("Items API", function() {
 
     describe("Post An Item", () => {
         it('it should POST an item', (done) => {
-            Item.create(new_item).then((data) => {
-                chai.request(app)
-                    .post(`/api/items/${data.id}`)
-                    .end((err, res) => {
-                        expect(res).to.have.status(200)
-                        expect(res.body).to.haveOwnProperty('id')
-                        expect(res.body).to.haveOwnProperty('name')
-                        expect(res.body).to.haveOwnProperty('description')
-                        expect(res.body).to.haveOwnProperty('dimension')
-                        expect(res.body).to.haveOwnProperty('material')
-                        expect(res.body).to.haveOwnProperty('photo')
-                        expect(res.body).to.haveOwnProperty('color')
-                        expect(res.body).to.haveOwnProperty('status')
-                        expect(res.body.name).to.equal('Hacktiv 8 Shirt')
-                        expect(res.body.color).to.equal('Orange')
-                        done()
-                    })
-            })
+            chai.request(app)
+                .post(`/api/items/${data.id}`)
+                .send(new_item)
+                .end((err, res) => {
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.haveOwnProperty('id')
+                    expect(res.body).to.haveOwnProperty('name')
+                    expect(res.body).to.haveOwnProperty('description')
+                    expect(res.body).to.haveOwnProperty('dimension')
+                    expect(res.body).to.haveOwnProperty('material')
+                    expect(res.body).to.haveOwnProperty('photo')
+                    expect(res.body).to.haveOwnProperty('color')
+                    expect(res.body).to.haveOwnProperty('status')
+                    expect(res.body.name).to.equal('Hacktiv 8 Shirt')
+                    expect(res.body.color).to.equal('Orange')
+                    done()
+                })
         })
     })
 
     describe("Update An Item", () => {
         it('it should UPDATE an item', (done) => {
             Item.create(new_item).then((data) => {
-                Item.update({
-                    name: 'Bee Gees Shirt',
-                    description: 'Only used for 2 months.',
-                    dimension: 'L',
-                    material: 'cotton',
-                    photo: 'http://i.imgur.com/tg8ylqw.jpg',
-                    color: 'Black',
-                    status: 'Up for barter'
-                }, {
-                    where: {
-                        id: data.id
-                    }
-                }).then(() => {
-                    Item.findOne({
-                        where: {
-                            id: data.id
-                        }
-                    }).then((data) => {
-                        chai.request(app)
-                            .put(`/api/items/${data.id}`)
-                            .end((err, res) => {
-                                expect(res).to.have.status(200)
-                                expect(res.body.name).to.equal('Bee Gees Shirt')
-                                expect(res.body.material).to.equal('cotton')
-                                expect(res.body.color).to.equal('Black')
-                                expect(res.body.status).to.equal('Up for barter')
-                                expect(res.body.description).to.equal('Only used for 2 months.')
-                                expect(res.body.dimension).to.equal('L')
-                                done()
-                            })
+                chai.request(app)
+                    .put(`/api/items/${data.id}`)
+                    .send(updated_item)
+                    .end((err, res) => {
+                        expect(res).to.have.status(200)
+                        expect(res.body.name).to.equal('Bee Gees Shirt')
+                        expect(res.body.material).to.equal('cotton')
+                        expect(res.body.color).to.equal('Black')
+                        expect(res.body.status).to.equal('Up for barter')
+                        expect(res.body.description).to.equal('Only used for 2 months.')
+                        expect(res.body.dimension).to.equal('L')
+                        done()
                     })
-                })
             })
         })
     })
