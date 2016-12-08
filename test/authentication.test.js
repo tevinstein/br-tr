@@ -1,16 +1,29 @@
 'use strict'
+require('dotenv').config()
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const expect = chai.expect
 const model = require('../models')
-const user = models.User
+const user = model.User
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const urlApi = 'http://localhost:3000/api'
 
 
 
+
 chai.use(chaiHttp);
+
+
+before(function(done) {
+  user.destroy({
+    where: {}
+  }).then(()=> {
+    console.log('all data deleted before test');
+    done()
+  })
+})
+
 
 describe('Create new User (register case) direct to database', function() {
     it('expect to return new user credentials and make sure a token is exist', function(done) {
@@ -25,7 +38,8 @@ describe('Create new User (register case) direct to database', function() {
                 username: data.username,
                 email: data.email,
                 avatar: data.avatar
-            }, process.env.SECRET, {expiresIn: '1h'})
+            }, process.env.JWT_SECRET, {expiresIn: '1h'})
+            console.log('JWT_SECRET : ', process.env.JWT_SECRET);
             console.log('register token created : ', token);
           expect(data).to.have.property('id')
           expect(data).to.have.property('username')
@@ -51,15 +65,15 @@ describe('Find User (Login case) direct to database and make sure a token from l
       password: crypto.createHash('md5').update('userpassword').digest("hex"),
       avatar: 'http://dummy-avatar-image.com'
     }).then((data) => {
-      user.find({
-        where: {username: data.username, password: crypto.createHash('md5').update(data.password).digest("hex") }
+      user.findOne({
+        where: {username: data.username, password: crypto.createHash('md5').update('userpassword').digest("hex") }
       }).then((auth_user) => {
         let token = jwt.sign({
             id: auth_user.id,
             username: auth_user.username,
             email: auth_user.email,
             avatar: auth_user.avatar
-        }, process.env.SECRET, {expiresIn: '1h'})
+        }, process.env.JWT_SECRET, {expiresIn: '1h'})
         console.log('login token created : ', token);
         expect(auth_user).to.not.be.undefined
         expect(auth_user.username).to.be.equal('user_testing_login')
@@ -92,7 +106,7 @@ describe('Create new User (register case) via route "/auth/register" to database
 })
 
 describe('Create new User (register case fail) via route "/auth/register" to database ', function() {
-    it('expect to make sure a token is generated and token is not undefined', function(done) {
+    it('expect to make sure a token is generated and token is undefined', function(done) {
         chai.request(urlApi)
             .post('/auth/register')
             .send({
@@ -102,7 +116,7 @@ describe('Create new User (register case fail) via route "/auth/register" to dat
               avatar: 'http://dummy-avatar-image.com'
             })
             .end(function(req, res) {
-              expect(res.body).to.be.undefined
+              expect(res.body.message).to.be.equal('Validation error: Validation isEmail failed')
               done()
             })
     })
@@ -147,11 +161,21 @@ describe('Find User (login fail case) via route "/auth/login" from database ', f
               password: crypto.createHash('md5').update('userpasswordsuccess').digest("hex")
             })
             .end(function(req, res) {
-              expect(res.body).to.be.undefined
+              console.log('res body : ', res.body);
+              expect(res.body).to.be.empty
               done()
             })
         })
     })
+})
+
+after(function(done) {
+  user.destroy({
+    where: {}
+  }).then(()=> {
+    console.log('all data deleted after test');
+    done()
+  })
 })
 
 

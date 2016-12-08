@@ -40,3 +40,6 @@ jspm_packages
 .idea
 .DS_Store
 .env
+
+# database configuration postgreSQL
+config
