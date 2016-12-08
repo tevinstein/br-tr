@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 chai.use(chaiHttp);
 
 describe('Create new User (register case) direct to database', function() {
-    it('expect to return user property and value', function(done) {
+    it('expect to return new user credentials and make sure a token is exist', function(done) {
         user.create({
           username: 'user_testing',
           email: 'user@testing.com',
@@ -25,16 +25,40 @@ describe('Create new User (register case) direct to database', function() {
                 avatar: data.avatar
             }, process.env.SECRET, {expiresIn: '1h'})
             console.log('register token created : ', token);
-          expect(token).to.have.property('id')
-          expect(token).to.have.property('username')
-          expect(token).to.have.property('email')
-          expect(token).to.have.property('avatar')
-          expect(token.username).to.be.equal('user_testing')
-          expect(token.email).to.be.equal('user@testing.com')
-          expect(token.password).to.not.equal('userpassword')
-          expect(token.avatar).to.be.equal('http://dummy-avatar-image.com')
+          expect(data).to.have.property('id')
+          expect(data).to.have.property('username')
+          expect(data).to.have.property('email')
+          expect(data).to.have.property('avatar')
+          expect(data.username).to.be.equal('user_testing')
+          expect(data.email).to.be.equal('user@testing.com')
+          expect(data.password).to.not.equal('userpassword')
+          expect(data.avatar).to.be.equal('http://dummy-avatar-image.com')
+          expect(token).to.exist
+          done()
         }).catch((err) => {
           console.log('Error : ', err);
         })
     })
+})
+
+describe('Find User (Login case) direct to database', function() {
+  it('expect to return authenticated user credentials', function(done) {
+    user.create({
+      username: 'user_testing_login',
+      email: 'user_testing_login@testing.com',
+      password: crypto.createHash('md5').update('userpassword').digest("hex"),
+      avatar: 'http://dummy-avatar-image.com'
+    }).then((data) => {
+      user.find({
+        where: {username: data.username, password: crypto.createHash('md5').update(data.password).digest("hex") }
+      }).then((auth_user) => {
+        expect(auth_user).to.not.be.null
+        expect(auth_user.username).to.be.equal('user_testing_login')
+        expect(auth_user.email).to.be.equal('user_testing_login@testing.com')
+        expect(auth_user.password).to.not.equal('userpassword')
+        expect(auth_user.avatar).to.be.equal('http://dummy-avatar-image.com')
+        done()
+      })
+    })
+  })
 })
