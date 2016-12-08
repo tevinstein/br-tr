@@ -39,8 +39,6 @@ describe('Create new User (register case) direct to database', function() {
                 email: data.email,
                 avatar: data.avatar
             }, process.env.JWT_SECRET, {expiresIn: '1h'})
-            console.log('JWT_SECRET : ', process.env.JWT_SECRET);
-            console.log('register token created : ', token);
           expect(data).to.have.property('id')
           expect(data).to.have.property('username')
           expect(data).to.have.property('email')
@@ -74,7 +72,6 @@ describe('Find User (Login case) direct to database and make sure a token from l
             email: auth_user.email,
             avatar: auth_user.avatar
         }, process.env.JWT_SECRET, {expiresIn: '1h'})
-        console.log('login token created : ', token);
         expect(auth_user).to.not.be.undefined
         expect(auth_user.username).to.be.equal('user_testing_login')
         expect(auth_user.email).to.be.equal('user_testing_login@testing.com')
@@ -116,7 +113,7 @@ describe('Create new User (register case fail) via route "/auth/register" to dat
               avatar: 'http://dummy-avatar-image.com'
             })
             .end(function(req, res) {
-              expect(res.body.message).to.be.equal('Validation error: Validation isEmail failed')
+              expect(res.body).to.be.empty
               done()
             })
     })
@@ -161,7 +158,6 @@ describe('Find User (login fail case) via route "/auth/login" from database ', f
               password: crypto.createHash('md5').update('userpasswordsuccess').digest("hex")
             })
             .end(function(req, res) {
-              console.log('res body : ', res.body);
               expect(res.body).to.be.empty
               done()
             })
