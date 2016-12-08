@@ -6,9 +6,9 @@ const expect = chai.expect
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 
-describe("Test for read all categories", () => {
+describe("Test for read all messages", () => {
 
-    describe("read all categories before login", () => {
+    describe("read all messages before login", () => {
         it("Expect to return 403", (done) => {
             chai.request(app)
                 .post('/api/users/login')
@@ -17,8 +17,7 @@ describe("Test for read all categories", () => {
                 })
                 .end((err, res) => {
                     chai.request(app)
-                        .get('/api/categories')
-                        .set('token', res.body.token)
+                        .get('/api/messages')
                         .end((err, res) => {
                             expect(res).to.have.status(403)
                             done()
@@ -27,8 +26,8 @@ describe("Test for read all categories", () => {
         })
     })
 
-    describe("read all categories after login", () => {
-        it("Expect to return all categories", (done) => {
+    describe("read all messages after login", () => {
+        it("Expect to return all messages", (done) => {
             chai.request(app)
                 .post('/api/users/login')
                 .send({
@@ -43,9 +42,10 @@ describe("Test for read all categories", () => {
                             expect(res.body).that.is.an('array')
                             expect(res.body[0]).to.haveOwnProperty('id')
                             expect(res.body[0]).to.haveOwnProperty('name')
+                            expect(res.body[0]).to.haveOwnProperty('status')
                             expect(res.body[0]).to.haveOwnProperty('createdAt')
                             expect(res.body[0]).to.haveOwnProperty('updatedAt')
-                            expect(res.body.length).to.equal(6)
+                            expect(res.body.length).to.equal(2)
                             done()
                         })
                 })
