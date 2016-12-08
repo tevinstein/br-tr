@@ -41,7 +41,7 @@ describe('Create new User (register case) direct to database', function() {
     })
 })
 
-describe('Find User (Login case) direct to database', function() {
+describe('Find User (Login case) direct to database and make sure a token from login is exist', function() {
   it('expect to return authenticated user credentials', function(done) {
     user.create({
       username: 'user_testing_login',
@@ -52,11 +52,19 @@ describe('Find User (Login case) direct to database', function() {
       user.find({
         where: {username: data.username, password: crypto.createHash('md5').update(data.password).digest("hex") }
       }).then((auth_user) => {
+        let token = jwt.sign({
+            id: auth_user.id,
+            username: auth_user.username,
+            email: auth_user.email,
+            avatar: auth_user.avatar
+        }, process.env.SECRET, {expiresIn: '1h'})
+        console.log('login token created : ', token);
         expect(auth_user).to.not.be.null
         expect(auth_user.username).to.be.equal('user_testing_login')
         expect(auth_user.email).to.be.equal('user_testing_login@testing.com')
         expect(auth_user.password).to.not.equal('userpassword')
         expect(auth_user.avatar).to.be.equal('http://dummy-avatar-image.com')
+        expect(token).to.exist
         done()
       })
     })
