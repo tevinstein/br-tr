@@ -31,15 +31,11 @@ var updated_item = {
 
 describe("Items", function() {
     beforeEach(function(done) {
-        Category.destroy({
-            where: {}
-        }).then((category) => {
             Item.destroy({
                 where: {}
             }).then((item) => {
                 done()
             })
-        })
     })
 
     describe("Get All Items", () => {
@@ -52,25 +48,33 @@ describe("Items", function() {
         })
     })
 
-    describe.only("Get All Items By Category", () => {
+    describe("Get All Items By Category", () => {
         it('it should GET all items by category', (done) => {
-            Category.create({ name: 'Electronic' })
+        	Category.destroy({
+        		where: {}
+        	}).then((deleted_category) => {
+        		Category.create({ name: 'Electronic' })
                 .then((category) => {
-                    Item.create(new_item)
+                	var my_current_item = new_item
+                	my_current_item.CategoryId = category.id
+                    Item.create(my_current_item)
                         .then((item) => {
-                        	item.CategoryId = category.id
-                        	console.log(item)
                             Item.findAll({
                                 where: {
                                     CategoryId: category.id
                                 }
                             }).then((data) => {
-                            	console.log(data)
-                                //expect
+                                expect(data[0]).to.have.property('id')
+                                expect(data[0]).to.have.property('name')
+                                expect(data[0]).to.have.property('CategoryId')
+                                expect(data[0].dimension).to.equal('M')
+                                expect(data[0].color).to.equal('Orange')
+                                expect(data[0].CategoryId).to.equal(category.id)
                                 done()
                             })
                         })
                 })
+        	})
         })
     })
 
