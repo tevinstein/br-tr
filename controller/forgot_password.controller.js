@@ -51,6 +51,7 @@ module.exports = {
                     console.log(response.statusCode)
                     console.log(response.body)
                     console.log(response.headers)
+                    res.status(200).json('email send')
                 })
             }
         }).catch((err) => {
@@ -95,9 +96,9 @@ module.exports = {
                             email: data.email
                         }
                     }).then((data) => {
-                        res.json(newPassHash)
+                        res.status(200).json(newPassHash)
                     }).catch((err) => {
-                        res.json(err)
+                        res.status(500).json(err)
                     })
 
                 })

@@ -8,7 +8,7 @@ const runSeedTest = require('../seed/seedForTesting')
 const urlApi = 'http://localhost:3000/api'
 const decode = require('jwt-decode')
 
-describe.only("Test for forgot password", () => {
+describe("Test for forgot password", () => {
     before(function(done) {
         runSeedTest.runSeedTest(done)
 
@@ -28,7 +28,7 @@ describe.only("Test for forgot password", () => {
         })
     })
 
-    describe.only("reset password", () => {
+    describe("reset password", () => {
         it("Expect to get new random password", (done) => {
             User.findOne({
                 where: {
