@@ -1,73 +1,98 @@
 const app = require('../app')
 const models = require('../models')
 const Message = models.Message
-const Item = models.Item
 const ItemMessage = models.ItemMessage
 const chai = require('chai')
 const expect = chai.expect
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
+const runSeedTest = require('../seed/seedForTesting')
+const urlApi = 'http://localhost:3000/api'
+const decode = require('jwt-decode')
 
-describe("Test for Create messages", () => {
+describe("Test for read all messages", () => {
+
+    before(function(done) {
+        runSeedTest.runSeedTest(done)
+
+    })
+
 
     describe("create messages before login", () => {
-        it("Expect to return 403", (done) => {
-            chai.request(app)
-                .post('/api/users/login')
-                .send({
-                    username: 'dharmadi'
-                })
-                .end((err, res) => {
-                    chai.request(app)
-                        .post('/api/messages')
-                        .end((err, res) => {
-                            expect(res).to.have.status(403)
-                            done()
-                        })
-                })
+        it("Expect to return 401", (done) => {
+            ItemMessage.findOne({
+                order: [
+                    ['id', 'ASC']
+                ]
+            }).then((data) => {
+                const ItemMessageId = data.id
+                const TempMessageId = Date.now().toString()
+                chai.request(urlApi)
+                    .post('/messages')
+                    .send({
+                        TempMessageId: TempMessageId,
+                        body: 'where will we meet?',
+                        ItemMessageId: ItemMessageId,
+                        status: 'unread'
+                    })
+                    .end((err, res) => {
+                        expect(res).to.have.status(401)
+                        done()
+                    })
+            }).catch((err) => {
+                console.log(err)
+            })
         })
     })
 
     describe("create messages after login", () => {
-        it("Expect to return messages that has been created", (done) => {
-            chai.request(app)
-                .post('/api/users/login')
+        it("Expect to return all messages", (done) => {
+            chai.request(urlApi)
+                .post('/auth/login')
                 .send({
-                    username: 'dharmadi'
+                    username: 'tepin',
+                    password: 'tepin'
                 })
                 .end((err, res) => {
-                    Item.findAll({
-                        limit: 2
+                    const userDecoded = decode(res.body)
+
+                    ItemMessage.findOne({
+                        order: [
+                            ['id', 'ASC']
+                        ]
                     }).then((data) => {
-                        ItemMessage.create({
-                            ItemId: data[0].id,
-                            BarteredItemId: data[1].id
-                        }).then((data) => {
-                            chai.request(app)
-                                .post('/api/messages')
-                                .set('token', res.body.token)
-                                .send({
-                                    TempMessageId: Date.now().toString(),
-                                    ItemMessageId: data.id,
-                                    body: 'content test',
-                                    status: 'unread'
-                                })
-                                .end((err, res) => {
-                                    expect(res).to.have.status(200)
-                                    expect(res.body).that.is.an('array')
-                                    expect(res.body).to.haveOwnProperty('id')
-                                    expect(res.body).to.haveOwnProperty('name')
-                                    expect(res.body).to.haveOwnProperty('status')
-                                    expect(res.body).to.haveOwnProperty('createdAt')
-                                    expect(res.body).to.haveOwnProperty('updatedAt')
-                                    expect(res.body).to.be.equal(data.id)
-                                    expect(res.body).to.be.equal(data.name)
-                                    expect(res.body).to.be.equal(data.status)
-                                    done()
-                                })
-                        })
+                        const ItemMessageId = data.id
+                        const TempMessageId = Date.now().toString()
+                        chai.request(urlApi)
+                            .post('/messages')
+                            .send({
+                                TempMessageId: TempMessageId,
+                                body: 'where will we meet?',
+                                ItemMessageId: ItemMessageId,
+                                UserId: userDecoded.id,
+                                status: 'unread'
+                            })
+                            .set({authorization: `Bearer ${res.body}`})
+
+                            .end((err, res) => {
+                                expect(res).to.have.status(200)
+                                expect(res.body).to.haveOwnProperty('id')
+                                expect(res.body).to.haveOwnProperty('TempMessageId')
+                                expect(res.body).to.haveOwnProperty('ItemMessageId')
+                                expect(res.body).to.haveOwnProperty('UserId')
+                                expect(res.body).to.haveOwnProperty('body')
+                                expect(res.body).to.haveOwnProperty('status')
+                                expect(res.body).to.haveOwnProperty('createdAt')
+                                expect(res.body).to.haveOwnProperty('updatedAt')
+                                expect(res.body.TempMessageId).to.equal(TempMessageId)
+                                expect(res.body.body).to.equal('where will we meet?')
+                                expect(res.body.ItemMessageId).to.equal(ItemMessageId)
+                                expect(res.body.UserId).to.equal(userDecoded.id)
+                                expect(res.body.status).to.equal('unread')
+                                done()
+                            })
                     }).catch((err) => {
-                        res.json(err)
+                        res.status(500).json(err)
                     })
                 })
         })
