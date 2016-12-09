@@ -36,7 +36,6 @@ describe.only("Test for read all categories", () => {
             chai.request(urlApi)
                 .post('/auth/login')
                 .end((err, res) => {
-                    console.log("ini body: ", res.body)
                     chai.request(urlApi)
                         .get('/categories')
                         .set({authorization: `Bearer ${res.body}`})
@@ -54,7 +53,6 @@ describe.only("Test for read all categories", () => {
             chai.request(urlApi)
                 .post('/auth/login')
                 .end((err, res) => {
-                    console.log("ini body: ", res.body)
                     chai.request(urlApi)
                         .get('/categories')
                         .set({authorization: `Bearer ${res.body}`})
@@ -79,11 +77,9 @@ describe.only("Test for read all categories", () => {
                     password: 'dharmadi'
                 })
                 .end((err, res) => {
-                console.log("ini body: ", res.body)
                     chai.request(urlApi)
                         .get('/categories')
                         .set({authorization: `Bearer ${res.body}`})
-
                         .end((err, res) => {
                             expect(res).to.have.status(200)
                             expect(res.body).that.is.an('array')
