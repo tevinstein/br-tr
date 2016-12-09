@@ -14,6 +14,7 @@ const routes = require('./routes/index');
 const api = require('./routes/api');
 const categories = require('./routes/category.routes');
 const messages = require('./routes/message.routes');
+const forgotPassword = require('./routes/forgot_password.routes.js');
 const models = require('./models')
 
 const app = express();
@@ -76,6 +77,7 @@ app.use('/', routes)
 app.use('/api', api)
 app.use('/api/categories', categories)
 app.use('/api/messages', messages)
+app.use('/api/forgot_password', forgotPassword)
 
 
 
