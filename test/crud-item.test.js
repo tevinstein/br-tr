@@ -29,13 +29,17 @@ var updated_item = {
     status: 'Bartered'
 }
 
-describe("Items", function() {
+// =======================================
+// ITEMS MODEL TEST CASES
+// =======================================
+
+describe("Test Items Model", function() {
     beforeEach(function(done) {
-            Item.destroy({
-                where: {}
-            }).then((item) => {
-                done()
-            })
+        Item.destroy({
+            where: {}
+        }).then((item) => {
+            done()
+        })
     })
 
     describe("Get All Items", () => {
@@ -50,31 +54,31 @@ describe("Items", function() {
 
     describe("Get All Items By Category", () => {
         it('it should GET all items by category', (done) => {
-        	Category.destroy({
-        		where: {}
-        	}).then((deleted_category) => {
-        		Category.create({ name: 'Electronic' })
-                .then((category) => {
-                	var my_current_item = new_item
-                	my_current_item.CategoryId = category.id
-                    Item.create(my_current_item)
-                        .then((item) => {
-                            Item.findAll({
-                                where: {
-                                    CategoryId: category.id
-                                }
-                            }).then((data) => {
-                                expect(data[0]).to.have.property('id')
-                                expect(data[0]).to.have.property('name')
-                                expect(data[0]).to.have.property('CategoryId')
-                                expect(data[0].dimension).to.equal('M')
-                                expect(data[0].color).to.equal('Orange')
-                                expect(data[0].CategoryId).to.equal(category.id)
-                                done()
+            Category.destroy({
+                where: {}
+            }).then((deleted_category) => {
+                Category.create({ name: 'Electronic' })
+                    .then((category) => {
+                        var my_current_item = new_item
+                        my_current_item.CategoryId = category.id
+                        Item.create(my_current_item)
+                            .then((item) => {
+                                Item.findAll({
+                                    where: {
+                                        CategoryId: category.id
+                                    }
+                                }).then((data) => {
+                                    expect(data[0]).to.have.property('id')
+                                    expect(data[0]).to.have.property('name')
+                                    expect(data[0]).to.have.property('CategoryId')
+                                    expect(data[0].dimension).to.equal('M')
+                                    expect(data[0].color).to.equal('Orange')
+                                    expect(data[0].CategoryId).to.equal(category.id)
+                                    done()
+                                })
                             })
-                        })
-                })
-        	})
+                    })
+            })
         })
     })
 
@@ -164,144 +168,161 @@ describe("Items", function() {
 })
 
 // =======================================
-// API TEST CASES
+// ITEMS API TEST CASES
 // =======================================
 
-// describe("Items API", function() {
-//     beforeEach(function(done) {
-//         Item.destroy({
-//             where: {
+describe("Test Items API", function() {
+    beforeEach(function(done) {
+        Item.destroy({
+            where: {}
+        }).then((item) => {
+            done()
+        })
+    })
 
-//             }
-//         }).then((data) => {
-//             done()
-//         })
-//     })
+    describe("Get All Items", () => {
+        it('it should not let user GET all items and return status 401', (done) => {
+            chai.request(urlApi)
+                .get('/items')
+                .end((err, res) => {
+                    expect(res).to.have.status(401)
+                    done()
+                })
+        })
+    })
 
-//     describe("Get All Items", () => {
-//         it('it should GET all items', (done) => {
-//             Item.findAll().then((data) => {
-//                 chai.request(app)
-//                     .get('/api/items')
-//                     .end((err, res) => {
-//                         expect(res).to.have.status(200)
-//                         expect(res.body).that.is.an('array')
-//                         expect(res.body).length.should.be.eql(0)
-//                         done()
-//                     })
-//             })
-//         })
-//     })
+    describe("Get All Items", () => {
+        it('it should GET all items', (done) => {
+            chai.request(urlApi)
+                .post('/auth/login')
+                .send({
+                	username: 'tepin',
+                	password: 'tepin'
+                })
+                .end((err,res) => {
+                	chai.request(urlApi)
+                		.get('/items')
+                		.set({authorization: `Bearer ${res.body}`})
+                		.end((err,res) => {
+                			expect(res).to.have.status(200)
+                			expect(res.body).that.is.an('array')
+                			done()
+                		})
+                })
+        })
+    })
 
-//     describe("Get All Items By Category", () => {
-//         it('it should GET all items', (done) => {
-//             Category.findAll().then((categories) => {
-//                 Item.findAll({
-//                     where: {
-//                         CategoryId: categories[0].id
-//                     }
-//                 }).then((data) => {
-//                     chai.request(app)
-//                         .get(`/api/categories/${categories[0].id}`)
-//                         .end((err, res) => {
-//                             expect(res).to.have.status(200)
-//                             expect(res.body).that.is.an('array')
-//                             expect(res.body).length.should.be.eql(0)
-//                             done()
-//                         })
-//                 })
-//             })
-//         })
-//     })
+    // describe("Get All Items By Category", () => {
+    //     it('it should GET all items by category', (done) => {
+    //         Category.findAll().then((categories) => {
+    //             Item.findAll({
+    //                 where: {
+    //                     CategoryId: categories[0].id
+    //                 }
+    //             }).then((data) => {
+    //                 chai.request(app)
+    //                     .get(`/api/categories/${categories[0].id}`)
+    //                     .end((err, res) => {
+    //                         expect(res).to.have.status(200)
+    //                         expect(res.body).that.is.an('array')
+    //                         expect(res.body).length.should.be.eql(0)
+    //                         done()
+    //                     })
+    //             })
+    //         })
+    //     })
+    // })
 
-//     describe("Get An Item", () => {
-//         it('it should GET an item', (done) => {
-//             Item.create(new_item).then((item) => {
-//                 Item.findOne({
-//                     where: {
-//                         id: item.id
-//                     }
-//                 }).then((data) => {
-//                     chai.request(app)
-//                         .get(`/api/items/${data.id}`)
-//                         .end((err, res) => {
-//                             expect(res).to.have.status(200)
-//                             expect(res.body).to.haveOwnProperty('id')
-//                             expect(res.body).to.haveOwnProperty('name')
-//                             expect(res.body).to.haveOwnProperty('description')
-//                             expect(res.body).to.haveOwnProperty('dimension')
-//                             expect(res.body).to.haveOwnProperty('material')
-//                             expect(res.body).to.haveOwnProperty('photo')
-//                             expect(res.body).to.haveOwnProperty('color')
-//                             expect(res.body).to.haveOwnProperty('status')
-//                             expect(res.body.name).to.equal('Hacktiv 8 Shirt')
-//                             expect(res.body.color).to.equal('Orange')
-//                             done()
-//                         })
-//                 })
-//             })
-//         })
-//     })
+    // describe.only("Get An Item", () => {
+    //     it('it should GET an item', (done) => {
+        	
+        	
+    //         Item.create(new_item).then((item) => {
+    //             Item.findOne({
+    //                 where: {
+    //                     id: item.id
+    //                 }
+    //             }).then((data) => {
+    //                 chai.request(app)
+    //                     .get(`/api/items/${data.id}`)
+    //                     .end((err, res) => {
+    //                         expect(res).to.have.status(200)
+    //                         expect(res.body).to.haveOwnProperty('id')
+    //                         expect(res.body).to.haveOwnProperty('name')
+    //                         expect(res.body).to.haveOwnProperty('description')
+    //                         expect(res.body).to.haveOwnProperty('dimension')
+    //                         expect(res.body).to.haveOwnProperty('material')
+    //                         expect(res.body).to.haveOwnProperty('photo')
+    //                         expect(res.body).to.haveOwnProperty('color')
+    //                         expect(res.body).to.haveOwnProperty('status')
+    //                         expect(res.body.name).to.equal('Hacktiv 8 Shirt')
+    //                         expect(res.body.color).to.equal('Orange')
+    //                         done()
+    //                     })
+    //             })
+    //         })
+    //     })
+    // })
 
-//     describe("Post An Item", () => {
-//         it('it should POST an item', (done) => {
-//             chai.request(app)
-//                 .post(`/api/items/${data.id}`)
-//                 .send(new_item)
-//                 .end((err, res) => {
-//                     expect(res).to.have.status(200)
-//                     expect(res.body).to.haveOwnProperty('id')
-//                     expect(res.body).to.haveOwnProperty('name')
-//                     expect(res.body).to.haveOwnProperty('description')
-//                     expect(res.body).to.haveOwnProperty('dimension')
-//                     expect(res.body).to.haveOwnProperty('material')
-//                     expect(res.body).to.haveOwnProperty('photo')
-//                     expect(res.body).to.haveOwnProperty('color')
-//                     expect(res.body).to.haveOwnProperty('status')
-//                     expect(res.body.name).to.equal('Hacktiv 8 Shirt')
-//                     expect(res.body.color).to.equal('Orange')
-//                     done()
-//                 })
-//         })
-//     })
+    // describe("Post An Item", () => {
+    //     it('it should POST an item', (done) => {
+    //         chai.request(app)
+    //             .post(`/api/items/${data.id}`)
+    //             .send(new_item)
+    //             .end((err, res) => {
+    //                 expect(res).to.have.status(200)
+    //                 expect(res.body).to.haveOwnProperty('id')
+    //                 expect(res.body).to.haveOwnProperty('name')
+    //                 expect(res.body).to.haveOwnProperty('description')
+    //                 expect(res.body).to.haveOwnProperty('dimension')
+    //                 expect(res.body).to.haveOwnProperty('material')
+    //                 expect(res.body).to.haveOwnProperty('photo')
+    //                 expect(res.body).to.haveOwnProperty('color')
+    //                 expect(res.body).to.haveOwnProperty('status')
+    //                 expect(res.body.name).to.equal('Hacktiv 8 Shirt')
+    //                 expect(res.body.color).to.equal('Orange')
+    //                 done()
+    //             })
+    //     })
+    // })
 
-//     describe("Update An Item", () => {
-//         it('it should UPDATE an item', (done) => {
-//             Item.create(new_item).then((data) => {
-//                 chai.request(app)
-//                     .put(`/api/items/${data.id}`)
-//                     .send(updated_item)
-//                     .end((err, res) => {
-//                         expect(res).to.have.status(200)
-//                         expect(res.body.name).to.equal('Bee Gees Shirt')
-//                         expect(res.body.material).to.equal('cotton')
-//                         expect(res.body.color).to.equal('Black')
-//                         expect(res.body.status).to.equal('Up for barter')
-//                         expect(res.body.description).to.equal('Only used for 2 months.')
-//                         expect(res.body.dimension).to.equal('L')
-//                         done()
-//                     })
-//             })
-//         })
-//     })
+    // describe("Update An Item", () => {
+    //     it('it should UPDATE an item', (done) => {
+    //         Item.create(new_item).then((data) => {
+    //             chai.request(app)
+    //                 .put(`/api/items/${data.id}`)
+    //                 .send(updated_item)
+    //                 .end((err, res) => {
+    //                     expect(res).to.have.status(200)
+    //                     expect(res.body.name).to.equal('Bee Gees Shirt')
+    //                     expect(res.body.material).to.equal('cotton')
+    //                     expect(res.body.color).to.equal('Black')
+    //                     expect(res.body.status).to.equal('Up for barter')
+    //                     expect(res.body.description).to.equal('Only used for 2 months.')
+    //                     expect(res.body.dimension).to.equal('L')
+    //                     done()
+    //                 })
+    //         })
+    //     })
+    // })
 
-//     describe("Delete an Item", () => {
-//         it('it should DELETE an item', (done) => {
-//             Item.create(new_item).then((item) => {
-//                 Item.destroy({
-//                     where: {
-//                         id: item.id
-//                     }
-//                 }).then((data) => {
-//                     chai.request(app)
-//                         .delete(`/api/items/${item.id}`)
-//                         .end((err, res) => {
-//                             expect(res).to.have.status(200)
-//                             expect(res.body).to.equal(1)
-//                             done()
-//                         })
-//                 })
-//             })
-//         })
-//     })
-// })
+    // describe("Delete an Item", () => {
+    //     it('it should DELETE an item', (done) => {
+    //         Item.create(new_item).then((item) => {
+    //             Item.destroy({
+    //                 where: {
+    //                     id: item.id
+    //                 }
+    //             }).then((data) => {
+    //                 chai.request(app)
+    //                     .delete(`/api/items/${item.id}`)
+    //                     .end((err, res) => {
+    //                         expect(res).to.have.status(200)
+    //                         expect(res.body).to.equal(1)
+    //                         done()
+    //                     })
+    //             })
+    //         })
+    //     })
+    // })
+})

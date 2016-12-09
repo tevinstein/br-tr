@@ -16,6 +16,7 @@ const categories = require('./routes/category.routes');
 const messages = require('./routes/message.routes');
 const forgotPassword = require('./routes/forgot_password.routes.js');
 const models = require('./models')
+const items = require('./routes/item.routes');
 
 const app = express();
 
@@ -78,7 +79,7 @@ app.use('/api', userAuth)
 app.use('/api/categories', categories)
 app.use('/api/messages', messages)
 app.use('/api/forgot_password', forgotPassword)
-
+app.use('/api/items', items)
 
 
 // catch 404 and forward to error handler
