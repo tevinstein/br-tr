@@ -39,5 +39,18 @@ module.exports = {
         }).catch((err) => {
             res.status(500).json(err)
         })
+    },
+    editPassword: function(req, res) {
+      user.update({
+        password: crypto.createHash('md5').update(req.body.password).digest("hex")
+      }, {
+        fields: ['password'],
+        where: {id: req.params.id}
+      }).then(()=> {
+        res.status(200)
+      }).catch((err)=> {
+        console.log(err);
+        res.status(500)
+      })
     }
 }

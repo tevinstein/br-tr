@@ -11,7 +11,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const crypto = require('crypto');
 
 const routes = require('./routes/index');
-const api = require('./routes/api');
+const userAuth = require('./routes/auth.routes');
 const categories = require('./routes/category.routes');
 const messages = require('./routes/message.routes');
 const models = require('./models')
@@ -73,7 +73,7 @@ const auth = function (req, res, next) {
 
 
 app.use('/', routes)
-app.use('/api', api)
+app.use('/api', userAuth)
 app.use('/api/categories', categories)
 app.use('/api/messages', messages)
 

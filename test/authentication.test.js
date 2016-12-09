@@ -9,14 +9,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const urlApi = 'http://localhost:3000/api'
 
-
-
-
 chai.use(chaiHttp);
-
-
-
-
 
 describe("test for user auth", () => {
 
@@ -126,7 +119,7 @@ describe("test for user auth", () => {
                     avatar: 'http://dummy-avatar-image.com'
                 })
                 .end(function(req, res) {
-                    expect(res.body).to.be.empty
+                    expect(res.body.name).to.be.equal('SequelizeValidationError')
                     done()
                 })
         })
