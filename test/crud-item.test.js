@@ -310,7 +310,7 @@ describe("Test Items API", function() {
         })
     })
 
-    describe.only("Delete an Item", () => {
+    describe("Delete an Item", () => {
         it('it should DELETE an item', (done) => {
             Item.create(new_item).then((item) => {
             	chai.request(urlApi)
