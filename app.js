@@ -39,12 +39,12 @@ passport.use(new LocalStrategy(
       .then(function (user) {
         // console.log('user : ', user);
         if (user !== null) {
-          console.log('[AUTH] Success with username: ' + user.username + ' and password (md5-hash): ' + user.password);
+          // console.log('[AUTH] Success with username: ' + user.username + ' and password (md5-hash): ' + user.password);
           return done(null, user);
         }
         else {
-          console.log('[AUTH] Error with username: ' + username + ' and password:' + password);
-          console.log('[AUTH] md5-hash of passed password: ' + crypto.createHash('md5').update(password).digest("hex"));
+          // console.log('[AUTH] Error with username: ' + username + ' and password:' + password);
+          // console.log('[AUTH] md5-hash of passed password: ' + crypto.createHash('md5').update(password).digest("hex"));
           return done(null, false);
         }
       })

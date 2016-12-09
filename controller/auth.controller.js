@@ -52,5 +52,19 @@ module.exports = {
         console.log(err);
         res.status(500)
       })
+    },
+    editAvatar: function(req, res) {
+      user.update({
+        avatar: req.body.avatar
+      }, {
+        fields: ['avatar'],
+        where: {id: req.params.id}
+      }).then(()=> {
+        res.status(200)
+      }).catch((err)=> {
+        console.log(err);
+        res.status(500)
+      })
+
     }
 }

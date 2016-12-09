@@ -11,7 +11,7 @@ const urlApi = 'http://localhost:3000/api'
 
 chai.use(chaiHttp);
 
-describe("test for user auth", () => {
+describe("====== test for user authentication (register & login) =========", () => {
 
     before(function(done) {
         user.destroy({
