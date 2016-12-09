@@ -1,4 +1,3 @@
-const app = require('../app')
 const mocha = require('mocha')
 const chai = require('chai')
 const expect = chai.expect
@@ -6,6 +5,7 @@ const models = require('../models')
 const chaiHttp = require('chai-http')
 const Item = models.Item
 const Category = models.Category
+const urlApi = 'http://localhost:3000/api'
 
 chai.use(chaiHttp)
 
