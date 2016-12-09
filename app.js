@@ -12,6 +12,7 @@ const crypto = require('crypto');
 
 const routes = require('./routes/index');
 const api = require('./routes/api');
+const categories = require('./routes/category.routes');
 const models = require('./models')
 
 const app = express();
@@ -35,7 +36,7 @@ passport.use(new LocalStrategy(
   function (username, password, done) {
     models.User.find({ where: {username: username, password: crypto.createHash('md5').update(password).digest("hex") } })
       .then(function (user) {
-        console.log('user : ', user);
+        // console.log('user : ', user);
         if (user !== null) {
           console.log('[AUTH] Success with username: ' + user.username + ' and password (md5-hash): ' + user.password);
           return done(null, user);
@@ -70,8 +71,9 @@ const auth = function (req, res, next) {
 
 
 
-app.use('/', routes);
+app.use('/', routes)
 app.use('/api', api)
+app.use('/api/categories', categories)
 
 
 // catch 404 and forward to error handler
@@ -138,7 +140,7 @@ var server = http.createServer(function (req, res) {
 });
 
 // Listen on port 3000, IP defaults to 127.0.0.1
-server.listen(port);
+app.listen(port);
 
 // Put a friendly message on the terminal
 console.log('Server running at http://127.0.0.1:' + port + '/')

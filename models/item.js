@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
-          Item.hasOne(models.Category)
+          Item.belongsTo(models.Category)
           Item.belongsTo(models.User)
           Item.hasMany(models.ItemMessage)
       }

@@ -1,37 +1,38 @@
 {
-    "name": "br-tr",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "start": "node app.js",
-        "dev": "nodemon app.js"
-    },
-    "dependencies": {
-        "body-parser": "~1.15.1",
-        "chai": "^3.5.0",
-        "chai-http": "^3.0.0",
-        "cookie-parser": "~1.4.3",
-        "cors": "^2.8.1",
-        "crypto": "0.0.3",
-        "debug": "~2.2.0",
-        "dotenv": "^2.0.0",
-        "ejs": "~2.4.1",
-        "express": "~4.13.4",
-        "express-session": "^1.14.2",
-        "jsonwebtoken": "^7.2.1",
-        "morgan": "~1.7.0",
-        "passport": "^0.3.2",
-        "passport-local": "^1.0.0",
-        "pg": "^6.1.0",
-        "pg-hstore": "^2.3.2",
-        "sequelize": "^3.27.0",
-        "sequelize-cli": "^2.4.0",
-        "serve-favicon": "~2.3.0"
-    },
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "chai-http": "^3.0.0",
-        "mocha": "^3.2.0",
-        "nodemon": "^1.11.0"
-    }
+  "name": "br-tr",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.1",
+    "crypto": "0.0.3",
+    "debug": "~2.2.0",
+    "dotenv": "^2.0.0",
+    "ejs": "~2.4.1",
+    "express": "~4.13.4",
+    "express-jwt": "^5.1.0",
+    "express-session": "^1.14.2",
+    "jsonwebtoken": "^7.2.1",
+    "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.27.0",
+    "sequelize-cli": "^2.4.0",
+    "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0"
+  }
 }
