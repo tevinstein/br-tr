@@ -244,6 +244,38 @@ describe("Test Items API", function() {
         })
     })
 
+    describe("Get Item By Name", () => {
+        it('it should GET an item by name', (done) => {
+            chai.request(urlApi)
+                .post('/auth/login')
+                .send({
+                    username: 'tepin',
+                    password: 'tepin'
+                })
+                .end((err, res) => {
+                    Item.create(new_item).then((data) => {
+                        chai.request(urlApi)
+                            .get(`/items/search/8`)
+                            .set({ authorization: `Bearer ${res.body}` })
+                            .end((err, response) => {
+                                expect(response).to.have.status(200)
+                                expect(response.body[0]).to.have.property('id')
+                                expect(response.body[0]).to.have.property('name')
+                                expect(response.body[0]).to.have.property('description')
+                                expect(response.body[0]).to.have.property('dimension')
+                                expect(response.body[0]).to.have.property('material')
+                                expect(response.body[0]).to.have.property('photo')
+                                expect(response.body[0]).to.have.property('color')
+                                expect(response.body[0]).to.have.property('status')
+                                expect(response.body[0].name).to.equal('Hacktiv 8 Shirt')
+                                expect(response.body[0].color).to.equal('Orange')
+                                done()
+                            })
+                    })
+                })
+        })
+    })
+
     describe("Post An Item", () => {
         it('it should POST an item', (done) => {
             chai.request(urlApi)
@@ -268,7 +300,7 @@ describe("Test Items API", function() {
                             expect(response.body.data).to.have.property('photo')
                             expect(response.body.data).to.have.property('color')
                             expect(response.body.data).to.have.property('status')
-                            expect(response.body.data.name).to.equal('Hacktiv 8 Shirt')
+                            expect(response.body.data.name).to.equal('hacktiv 8 shirt')
                             expect(response.body.data.color).to.equal('Orange')
                             done()
                         })
@@ -313,7 +345,7 @@ describe("Test Items API", function() {
     describe("Delete an Item", () => {
         it('it should DELETE an item', (done) => {
             Item.create(new_item).then((item) => {
-            	chai.request(urlApi)
+                chai.request(urlApi)
                     .post('/auth/login')
                     .send({
                         username: 'tepin',

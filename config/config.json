@@ -1,15 +1,16 @@
 {
   "development": {
     "username": "postgres",
-    "password": "dharmadi",
-    "database": "brtr_dev",
+    "password": "postgres",
+    "database": "barter_database_development",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "postgres",
-    "password": "dharmadi",
-    "database": "brtr_test",
+    "password": "postgres",
+    "database": "barter_database_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
