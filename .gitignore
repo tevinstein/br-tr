@@ -41,6 +41,8 @@ jspm_packages
 .DS_Store
 .env
 
+# database configuration postgreSQL
+config
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
