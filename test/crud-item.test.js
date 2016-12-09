@@ -196,18 +196,18 @@ describe("Test Items API", function() {
             chai.request(urlApi)
                 .post('/auth/login')
                 .send({
-                	username: 'tepin',
-                	password: 'tepin'
+                    username: 'tepin',
+                    password: 'tepin'
                 })
-                .end((err,res) => {
-                	chai.request(urlApi)
-                		.get('/items')
-                		.set({authorization: `Bearer ${res.body}`})
-                		.end((err,res) => {
-                			expect(res).to.have.status(200)
-                			expect(res.body).that.is.an('array')
-                			done()
-                		})
+                .end((err, res) => {
+                    chai.request(urlApi)
+                        .get('/items')
+                        .set({ authorization: `Bearer ${res.body}` })
+                        .end((err, res) => {
+                            expect(res).to.have.status(200)
+                            expect(res.body).that.is.an('array')
+                            done()
+                        })
                 })
         })
     })
@@ -233,36 +233,38 @@ describe("Test Items API", function() {
     //     })
     // })
 
-    // describe.only("Get An Item", () => {
-    //     it('it should GET an item', (done) => {
-        	
-        	
-    //         Item.create(new_item).then((item) => {
-    //             Item.findOne({
-    //                 where: {
-    //                     id: item.id
-    //                 }
-    //             }).then((data) => {
-    //                 chai.request(app)
-    //                     .get(`/api/items/${data.id}`)
-    //                     .end((err, res) => {
-    //                         expect(res).to.have.status(200)
-    //                         expect(res.body).to.haveOwnProperty('id')
-    //                         expect(res.body).to.haveOwnProperty('name')
-    //                         expect(res.body).to.haveOwnProperty('description')
-    //                         expect(res.body).to.haveOwnProperty('dimension')
-    //                         expect(res.body).to.haveOwnProperty('material')
-    //                         expect(res.body).to.haveOwnProperty('photo')
-    //                         expect(res.body).to.haveOwnProperty('color')
-    //                         expect(res.body).to.haveOwnProperty('status')
-    //                         expect(res.body.name).to.equal('Hacktiv 8 Shirt')
-    //                         expect(res.body.color).to.equal('Orange')
-    //                         done()
-    //                     })
-    //             })
-    //         })
-    //     })
-    // })
+    describe("Get An Item", () => {
+        it('it should GET an item', (done) => {
+            chai.request(urlApi)
+                .post('/auth/login')
+                .send({
+                    username: 'tepin',
+                    password: 'tepin'
+                })
+                .end((err, res) => {
+                    Item.create(new_item).then((data) => {
+                        chai.request(urlApi)
+                            .get(`/items/${data.id}`)
+                            .set({ authorization: `Bearer ${res.body}` })
+                            .end((err, response) => {
+                                expect(response).to.have.status(200)
+                                expect(response.body).to.have.property('id')
+                                expect(response.body).to.have.property('name')
+                                expect(response.body).to.have.property('description')
+                                expect(response.body).to.have.property('dimension')
+                                expect(response.body).to.have.property('material')
+                                expect(response.body).to.have.property('photo')
+                                expect(response.body).to.have.property('color')
+                                expect(response.body).to.have.property('status')
+                                expect(response.body.name).to.equal('Hacktiv 8 Shirt')
+                                expect(response.body.color).to.equal('Orange')
+                                done()
+                            })
+                    })
+                })
+        })
+    })
+
 
     // describe("Post An Item", () => {
     //     it('it should POST an item', (done) => {
