@@ -212,27 +212,6 @@ describe("Test Items API", function() {
         })
     })
 
-    // describe("Get All Items By Category", () => {
-    //     it('it should GET all items by category', (done) => {
-    //         Category.findAll().then((categories) => {
-    //             Item.findAll({
-    //                 where: {
-    //                     CategoryId: categories[0].id
-    //                 }
-    //             }).then((data) => {
-    //                 chai.request(app)
-    //                     .get(`/api/categories/${categories[0].id}`)
-    //                     .end((err, res) => {
-    //                         expect(res).to.have.status(200)
-    //                         expect(res.body).that.is.an('array')
-    //                         expect(res.body).length.should.be.eql(0)
-    //                         done()
-    //                     })
-    //             })
-    //         })
-    //     })
-    // })
-
     describe("Get An Item", () => {
         it('it should GET an item', (done) => {
             chai.request(urlApi)
@@ -265,66 +244,93 @@ describe("Test Items API", function() {
         })
     })
 
+    describe("Post An Item", () => {
+        it('it should POST an item', (done) => {
+            chai.request(urlApi)
+                .post('/auth/login')
+                .send({
+                    username: 'tepin',
+                    password: 'tepin'
+                })
+                .end((err, res) => {
+                    chai.request(urlApi)
+                        .post(`/items`)
+                        .set({ authorization: `Bearer ${res.body}` })
+                        .send(new_item)
+                        .end((err, response) => {
+                            expect(response).to.have.status(200)
+                            expect(response.body.message).to.equal('data is added!')
+                            expect(response.body.data).to.have.property('id')
+                            expect(response.body.data).to.have.property('name')
+                            expect(response.body.data).to.have.property('description')
+                            expect(response.body.data).to.have.property('dimension')
+                            expect(response.body.data).to.have.property('material')
+                            expect(response.body.data).to.have.property('photo')
+                            expect(response.body.data).to.have.property('color')
+                            expect(response.body.data).to.have.property('status')
+                            expect(response.body.data.name).to.equal('Hacktiv 8 Shirt')
+                            expect(response.body.data.color).to.equal('Orange')
+                            done()
+                        })
+                })
+        })
+    })
 
-    // describe("Post An Item", () => {
-    //     it('it should POST an item', (done) => {
-    //         chai.request(app)
-    //             .post(`/api/items/${data.id}`)
-    //             .send(new_item)
-    //             .end((err, res) => {
-    //                 expect(res).to.have.status(200)
-    //                 expect(res.body).to.haveOwnProperty('id')
-    //                 expect(res.body).to.haveOwnProperty('name')
-    //                 expect(res.body).to.haveOwnProperty('description')
-    //                 expect(res.body).to.haveOwnProperty('dimension')
-    //                 expect(res.body).to.haveOwnProperty('material')
-    //                 expect(res.body).to.haveOwnProperty('photo')
-    //                 expect(res.body).to.haveOwnProperty('color')
-    //                 expect(res.body).to.haveOwnProperty('status')
-    //                 expect(res.body.name).to.equal('Hacktiv 8 Shirt')
-    //                 expect(res.body.color).to.equal('Orange')
-    //                 done()
-    //             })
-    //     })
-    // })
+    describe("Update An Item", () => {
+        it('it should UPDATE an item', (done) => {
+            Item.create(new_item).then((data) => {
+                chai.request(urlApi)
+                    .post('/auth/login')
+                    .send({
+                        username: 'tepin',
+                        password: 'tepin'
+                    })
+                    .end((err, res) => {
+                        chai.request(urlApi)
+                            .put(`/items/${data.id}`)
+                            .set({ authorization: `Bearer ${res.body}` })
+                            .send(updated_item)
+                            .end((err, response) => {
+                                expect(response).to.have.status(200)
+                                expect(response.body.message).to.equal('data is updated!')
+                                expect(response.body.data).to.have.property('id')
+                                expect(response.body.data).to.have.property('name')
+                                expect(response.body.data).to.have.property('description')
+                                expect(response.body.data).to.have.property('dimension')
+                                expect(response.body.data).to.have.property('material')
+                                expect(response.body.data).to.have.property('photo')
+                                expect(response.body.data).to.have.property('color')
+                                expect(response.body.data).to.have.property('status')
+                                expect(response.body.data.name).to.equal('Bee Gees Shirt')
+                                expect(response.body.data.dimension).to.equal('L')
+                                done()
+                            })
+                    })
+            })
+        })
+    })
 
-    // describe("Update An Item", () => {
-    //     it('it should UPDATE an item', (done) => {
-    //         Item.create(new_item).then((data) => {
-    //             chai.request(app)
-    //                 .put(`/api/items/${data.id}`)
-    //                 .send(updated_item)
-    //                 .end((err, res) => {
-    //                     expect(res).to.have.status(200)
-    //                     expect(res.body.name).to.equal('Bee Gees Shirt')
-    //                     expect(res.body.material).to.equal('cotton')
-    //                     expect(res.body.color).to.equal('Black')
-    //                     expect(res.body.status).to.equal('Up for barter')
-    //                     expect(res.body.description).to.equal('Only used for 2 months.')
-    //                     expect(res.body.dimension).to.equal('L')
-    //                     done()
-    //                 })
-    //         })
-    //     })
-    // })
-
-    // describe("Delete an Item", () => {
-    //     it('it should DELETE an item', (done) => {
-    //         Item.create(new_item).then((item) => {
-    //             Item.destroy({
-    //                 where: {
-    //                     id: item.id
-    //                 }
-    //             }).then((data) => {
-    //                 chai.request(app)
-    //                     .delete(`/api/items/${item.id}`)
-    //                     .end((err, res) => {
-    //                         expect(res).to.have.status(200)
-    //                         expect(res.body).to.equal(1)
-    //                         done()
-    //                     })
-    //             })
-    //         })
-    //     })
-    // })
+    describe.only("Delete an Item", () => {
+        it('it should DELETE an item', (done) => {
+            Item.create(new_item).then((item) => {
+            	chai.request(urlApi)
+                    .post('/auth/login')
+                    .send({
+                        username: 'tepin',
+                        password: 'tepin'
+                    })
+                    .end((err, res) => {
+                        chai.request(urlApi)
+                            .delete(`/items/${item.id}`)
+                            .set({ authorization: `Bearer ${res.body}` })
+                            .end((err, response) => {
+                                expect(response).to.have.status(200)
+                                expect(response.body.message).to.equal('data is deleted!')
+                                expect(response.body.data).to.equal(1)
+                                done()
+                            })
+                    })
+            })
+        })
+    })
 })
