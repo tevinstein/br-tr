@@ -91,7 +91,9 @@ function runSeedTest(done) {
                                                                 color: 'Black',
                                                                 status: 'up for barter'
                                                             }).then((data) => {
+                                                                // console.log("dari seed: ", data)
                                                                 const BarteredItemId = data.id
+                                                                console.log("dari seed: ", BarteredItemId)
                                                                 ItemMessage.create({
                                                                     ItemId: ItemId,
                                                                     BarteredItemId: BarteredItemId,
@@ -102,13 +104,15 @@ function runSeedTest(done) {
                                                                         TempMessageId: Date.now().toString(),
                                                                         ItemMessageId: ItemMessageId,
                                                                         UserId: IdUserTepin,
-                                                                        body: "hi my name is tepin and i want to barter your shoe with my iphone"
+                                                                        body: "hi my name is tepin and i want to barter your shoe with my iphone",
+                                                                        status: 'unread'
                                                                     }).then(() => {
                                                                         Message.create({
                                                                             TempMessageId: Date.now().toString(),
                                                                             ItemMessageId: ItemMessageId,
                                                                             UserId: IdUserDharmadi,
-                                                                            body: "hi my name is tepin and i want to barter your shoe with my iphone"
+                                                                            body: "oke lets barter with my shoe",
+                                                                            status: 'unread'
                                                                         }).then(() => {
                                                                             done()
                                                                         })

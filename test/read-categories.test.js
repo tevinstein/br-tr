@@ -7,7 +7,7 @@ chai.use(chaiHttp)
 const urlApi = 'http://localhost:3000/api'
 const runSeedTest = require('../seed/seedForTesting')
 
-describe.only("Test for read all categories", () => {
+describe("Test for read all categories", () => {
 
     before(function(done) {
         runSeedTest.runSeedTest(done)

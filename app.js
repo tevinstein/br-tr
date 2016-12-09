@@ -13,6 +13,7 @@ const crypto = require('crypto');
 const routes = require('./routes/index');
 const api = require('./routes/api');
 const categories = require('./routes/category.routes');
+const messages = require('./routes/message.routes');
 const models = require('./models')
 
 const app = express();
@@ -74,6 +75,7 @@ const auth = function (req, res, next) {
 app.use('/', routes)
 app.use('/api', api)
 app.use('/api/categories', categories)
+app.use('/api/messages', messages)
 
 
 // catch 404 and forward to error handler
