@@ -48,9 +48,6 @@ module.exports = {
                 });
 
                 sg.API(request, function(error, response) {
-                    console.log(response.statusCode)
-                    console.log(response.body)
-                    console.log(response.headers)
                     res.status(200).json('email send')
                 })
             }
@@ -66,7 +63,6 @@ module.exports = {
             }
         }).then((data) => {
             if (data.username) {
-                console.log("email: ", data.email)
                 const newPass = makeRandomPassword()
                 const newPassHash = crypto.createHash('md5').update(newPass).digest("hex")
                 from_email = new helper.Email("admin@brtr.com")
@@ -85,10 +81,6 @@ module.exports = {
                 });
 
                 sg.API(request, function(error, response) {
-                    console.log(response.statusCode)
-                    console.log(response.body)
-                    console.log(response.headers)
-
                     User.update({
                         password: newPassHash
                     }, {
