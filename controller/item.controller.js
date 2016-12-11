@@ -2,6 +2,7 @@ const models = require('../models')
 const Item = models.Item
 const User = models.User
 
+
 module.exports = {
     getAllItem: (req, res) => {
         Item.findAll().then((datas) => {
