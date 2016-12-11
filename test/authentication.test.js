@@ -11,13 +11,12 @@ const urlApi = 'http://localhost:3000/api'
 
 chai.use(chaiHttp);
 
-describe("====== test for user authentication (register & login) =========", () => {
+describe("Test for user authentication (register & login)", () => {
 
     before(function(done) {
         user.destroy({
             where: {}
         }).then(()=> {
-            console.log('all data deleted before test');
             done()
         })
     })
@@ -26,7 +25,6 @@ describe("====== test for user authentication (register & login) =========", () 
         user.destroy({
             where: {}
         }).then(()=> {
-            console.log('all data deleted after test');
             done()
         })
     })
@@ -171,17 +169,3 @@ describe("====== test for user authentication (register & login) =========", () 
         })
     })
 })
-
-
-
-
-
-
-// expect(res.body).to.have.property('username')
-// expect(res.body).to.have.property('email')
-// expect(res.body).to.have.property('password')
-// expect(res.body).to.have.property('avatar')
-// expect(res.body.username).to.be.equal('user_testing_route_register')
-// expect(res.body.email).to.be.equal('user_testing_route_register@testing.com')
-// expect(res.body.password).to.not.equal('userpassword')
-// expect(res.body.avatar).to.be.equal('http://dummy-avatar-image.com')

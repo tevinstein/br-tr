@@ -18,7 +18,6 @@ module.exports = function(sequelize, DataTypes) {
                         console.log('username has been used');
                         return next({message: 'username has been used'});
                     } else {
-                        console.log('next ?');
                         next();
                     }
                 });

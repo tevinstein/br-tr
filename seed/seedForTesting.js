@@ -91,9 +91,7 @@ function runSeedTest(done) {
                                                                 color: 'Black',
                                                                 status: 'up for barter'
                                                             }).then((data) => {
-                                                                // console.log("dari seed: ", data)
                                                                 const BarteredItemId = data.id
-                                                                console.log("dari seed: ", BarteredItemId)
                                                                 ItemMessage.create({
                                                                     ItemId: ItemId,
                                                                     BarteredItemId: BarteredItemId,
