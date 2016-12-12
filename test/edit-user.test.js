@@ -12,18 +12,16 @@ const urlApi = 'http://localhost:3000/api'
 
 chai.use(chaiHttp);
 
-describe("========== test for user change password ==============", () => {
+describe("Test for user change password", () => {
 
     before(function(done) {
         user.destroy({where: {}}).then(() => {
-            console.log('all data deleted before test');
             done()
         })
     })
 
     after(function(done) {
         user.destroy({where: {}}).then(() => {
-            console.log('all data deleted after test');
             done()
         })
     })
@@ -84,19 +82,17 @@ describe("========== test for user change password ==============", () => {
     })
 })
 
-describe('======= test for user change avatar =======', function() {
+describe('Test for user change avatar', function() {
 
 
   before(function(done) {
       user.destroy({where: {}}).then(() => {
-          console.log('all data deleted before test');
           done()
       })
   })
 
   after(function(done) {
       user.destroy({where: {}}).then(() => {
-          console.log('all data deleted after test');
           done()
       })
   })

@@ -7,5 +7,6 @@ const categoryController = require('../controller/category.controller');
 var jwt = require('express-jwt');
 
 router.get('/', jwt({secret: process.env.JWT_SECRET}), categoryController.getAllCategories)
+router.get('/:CategoryId', jwt({secret: process.env.JWT_SECRET}), categoryController.searchByCategory)
 
 module.exports = router;
