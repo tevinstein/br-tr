@@ -4,7 +4,11 @@ const Item = models.Item
 
 module.exports = {
     getAllCategories: (req, res) => {
-        Category.findAll().then((data) => {
+        Category.findAll({
+            order: [
+                ['name', 'ASC'],
+            ]
+        }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
             res.status(500).json(err)
