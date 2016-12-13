@@ -9,8 +9,7 @@ module.exports = {
     getAllItemMessage: (req, res) => {
         ItemMessage.findAll({
             where: {
-                ItemId: req.params.ItemId,
-                BarteredItemId: req.params.BarteredItemId
+                ItemId: req.params.ItemId
             }
         }).then((data) => {
             res.status(200).json(err)
