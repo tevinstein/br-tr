@@ -17,10 +17,7 @@ module.exports = {
                     model: Item,
                     as: 'Item2'
                 }
-            ],
-            where: {
-                ItemId: req.params.ItemId
-            }
+            ]
         }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
