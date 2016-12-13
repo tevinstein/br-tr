@@ -8,8 +8,8 @@
         "logging": false
     },
     "test": {
-        "username": "hacktiv8-10",
-        "password": "password",
+        "username": "postgres",
+        "password": "dharmadi",
         "database": "barter_database_test",
         "host": "127.0.0.1",
         "dialect": "postgres"
