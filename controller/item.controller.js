@@ -29,9 +29,14 @@ module.exports = {
     },
     getItemByName: (req,res) => {
         Item.findAll({
+          include: [
+            {
+              model: User
+            }
+          ],
             where: {
                 name: {
-                   $like: `%${req.params.name.toLowerCase()}%`   
+                   $like: `%${req.params.name.toLowerCase()}%`
                 }
             }
         }).then((data) => {
