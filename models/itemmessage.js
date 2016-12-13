@@ -8,6 +8,7 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 // associations can be defined here
+                ItemMessage.belongsTo(models.Item, {as: 'Item2', foreignKey: 'BarteredItemId'})
                 ItemMessage.belongsTo(models.Item)
                 ItemMessage.hasMany(models.Message)
             }

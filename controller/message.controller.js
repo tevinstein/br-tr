@@ -7,10 +7,15 @@ const Message = models.Message
 
 module.exports = {
     getAllItemMessage: (req, res) => {
+        console.log("masuk")
         ItemMessage.findAll({
             include:[
                 {
-                    model:Item
+                    model:Item,
+                },
+                {
+                    model: Item,
+                    as: 'Item2'
                 }
             ],
             where: {
@@ -19,6 +24,7 @@ module.exports = {
         }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
+            console.log(err)
             res.status(500).json(err)
         })
     },
