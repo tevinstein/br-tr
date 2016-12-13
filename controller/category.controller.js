@@ -1,6 +1,7 @@
 const models = require('../models')
 const Category = models.Category
 const Item = models.Item
+const User = models.User
 
 module.exports = {
     getAllCategories: (req, res) => {
@@ -17,6 +18,11 @@ module.exports = {
 
     searchByCategory: (req, res) => {
         Item.findAll({
+            include: [
+                {
+                    model: User
+                }
+            ],
             where: {
                 CategoryId: req.params.CategoryId
             }
