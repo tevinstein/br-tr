@@ -12,10 +12,20 @@ module.exports = {
             include:[
                 {
                     model:Item,
+                    include: [
+                      {
+                        model: User
+                      }
+                    ]
                 },
                 {
                     model: Item,
-                    as: 'Item2'
+                    as: 'Item2',
+                    include: [
+                      {
+                        model: User
+                      }
+                    ]
                 }
             ]
         }).then((data) => {
