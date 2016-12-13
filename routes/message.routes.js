@@ -7,7 +7,7 @@ const messageController = require('../controller/message.controller');
 var jwt = require('express-jwt');
 
 router.get('/', jwt({secret: process.env.JWT_SECRET}), messageController.getAllMessage)
-router.get('/itemMessage', jwt({secret: process.env.JWT_SECRET}), messageController.getAllMessage)
+router.get('/itemMessage', jwt({secret: process.env.JWT_SECRET}), messageController.getAllItemMessage)
 router.post('/', jwt({secret: process.env.JWT_SECRET}), messageController.createMessage)
 router.post('/itemMessage', jwt({secret: process.env.JWT_SECRET}), messageController.createItemMessage)
 
