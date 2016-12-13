@@ -5,7 +5,13 @@ const User = models.User
 
 module.exports = {
     getAllItem: (req, res) => {
-        Item.findAll().then((datas) => {
+        Item.findAll({
+          include: [
+            {
+              model: User
+            }
+          ]
+        }).then((datas) => {
             res.status(200).json(datas)
         }).catch((err) => {
             res.status(500).json(err)
@@ -36,7 +42,7 @@ module.exports = {
           ],
             where: {
                 name: {
-                   $like: `%${req.params.name.toLowerCase()}%`
+                   ilike: `%${req.params.name.toLowerCase()}%`
                 }
             }
         }).then((data) => {
@@ -47,6 +53,11 @@ module.exports = {
     },
     getItemByUserId: (req,res) => {
         Item.findAll({
+          include: [
+            {
+              model: User
+            }
+          ],
             where: {
                 UserId: req.params.UserId
             }
@@ -60,7 +71,7 @@ module.exports = {
     	Item.create({
     		UserId: req.body.UserId,
     		CategoryId: req.body.CategoryId,
-    		name: req.body.name.toLowerCase(),
+    		name: req.body.name,
     		description: req.body.description,
     		dimension: req.body.dimension,
     		material: req.body.material,

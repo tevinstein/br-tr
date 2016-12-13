@@ -87,7 +87,7 @@ describe("Test for read all categories", () => {
                             expect(res.body[0]).to.haveOwnProperty('name')
                             expect(res.body[0]).to.haveOwnProperty('createdAt')
                             expect(res.body[0]).to.haveOwnProperty('updatedAt')
-                            expect(res.body.length).to.equal(6)
+                            expect(res.body.length).to.equal(8)
                             done()
                         })
                 })
@@ -103,7 +103,7 @@ describe("Test for read all categories", () => {
                     }).then((data) => {
                         const CategoryId = data.id
                         Item.create({
-                            
+
                             CategoryId: CategoryId,
                             name: 'item 1',
                             description: 'description 1',

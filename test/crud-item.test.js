@@ -300,7 +300,7 @@ describe("Test Items API", function() {
                             expect(response.body.data).to.have.property('photo')
                             expect(response.body.data).to.have.property('color')
                             expect(response.body.data).to.have.property('status')
-                            expect(response.body.data.name).to.equal('hacktiv 8 shirt')
+                            expect(response.body.data.name).to.equal('Hacktiv 8 Shirt')
                             expect(response.body.data.color).to.equal('Orange')
                             done()
                         })
