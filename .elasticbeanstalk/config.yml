@@ -2,6 +2,12 @@ branch-defaults:
   develop:
     environment: br-tr-dev
     group_suffix: null
+  master:
+    environment: br-tr-dev
+environment-defaults:
+  br-tr-dev:
+    branch: null
+    repository: null
 global:
   application_name: br-tr
   branch: null
