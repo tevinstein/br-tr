@@ -6,17 +6,30 @@ const ItemMessage = models.ItemMessage
 const Message = models.Message
 
 module.exports = {
+    getAllItemMessage: (req, res) => {
+        ItemMessage.findAll({
+            where: {
+                ItemId: req.params.ItemId
+            }
+        }).then((data) => {
+            res.status(200).json(err)
+        }).catch((err) => {
+            res.status(500).json(err)
+        })
+    },
+
     getAllMessage: (req, res) => {
-        ItemMessage.findOne().then((data) => {
-            Message.findAll({
-                include: [
-                    {
-                        model: User
-                    }
-                ]
-            }).then((data) => {
-                res.status(200).json(data)
-            })
+        Message.findAll({
+            include: [
+                {
+                    model: User
+                }
+            ],
+            where: {
+                ItemMessageId: req.params.ItemMessageId
+            }
+        }).then((data) => {
+            res.status(200).json(data)
         }).catch((err) => {
             res.status(500).json(err)
         })
