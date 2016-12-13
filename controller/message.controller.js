@@ -9,12 +9,26 @@ module.exports = {
     getAllMessage: (req, res) => {
         ItemMessage.findOne().then((data) => {
             Message.findAll({
-                where: {
-                    ItemMessageId: data.id
-                }
+                include: [
+                    {
+                        model: User
+                    }
+                ]
             }).then((data) => {
                 res.status(200).json(data)
             })
+        }).catch((err) => {
+            res.status(500).json(err)
+        })
+    },
+
+    createItemMessage: (req, res) => {
+        ItemMessage.create({
+            title: req.body.title,
+            ItemId: req.body.ItemId,
+            BarteredItemId: req.body.BarteredItemId
+        }).then((data) => {
+            res.status(200).json(data)
         }).catch((err) => {
             res.status(500).json(err)
         })
