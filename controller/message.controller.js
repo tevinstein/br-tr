@@ -8,6 +8,11 @@ const Message = models.Message
 module.exports = {
     getAllItemMessage: (req, res) => {
         ItemMessage.findAll({
+            include:[
+                {
+                    model:Item
+                }
+            ],
             where: {
                 ItemId: req.params.ItemId
             }
