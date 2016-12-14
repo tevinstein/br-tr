@@ -66,5 +66,20 @@ module.exports = {
         res.status(500)
       })
 
+    },
+
+    editProfile: function(req, res) {
+        user.update({
+            avatar: req.body.avatar,
+            password: crypto.createHash('md5').update(req.body.password).digest("hex")
+        }, {
+            where: {id: req.params.id}
+        }).then(()=> {
+            res.status(200)
+        }).catch((err)=> {
+            console.log(err);
+            res.status(500)
+        })
+
     }
 }
