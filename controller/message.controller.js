@@ -73,7 +73,18 @@ module.exports = {
             UserId: req.body.UserId,
             status: req.body.status
         }).then((data) => {
-            res.status(200).json(data)
+            Message.findOne({
+                include: [
+                    {
+                        model: User
+                    }
+                ],
+                where: {
+                    TempMessageId: req.body.TempMessageId
+                }
+            }).then((data) => {
+                res.status(200).json(data)
+            })
         }).catch((err) => {
             res.status(500).json(err)
         })
