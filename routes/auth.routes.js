@@ -6,7 +6,7 @@ var jwt = require('express-jwt');
 
 const passport = require('passport');
 
-router.post('/auth/user/:id', authController.getUserById)
+router.get('/auth/user/:id', jwt({secret: process.env.JWT_SECRET}), authController.getUserById)
 router.post('/auth/register', authController.registerProcess)
 router.post('/auth/login', passport.authenticate('local'), authController.loginProcess)
 router.put('/auth/edit_password/:id', jwt({secret: process.env.JWT_SECRET}), authController.editPassword)
