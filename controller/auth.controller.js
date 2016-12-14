@@ -67,6 +67,19 @@ module.exports = {
 
     },
 
+    getUserById: function(req, res) {
+        user.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((data) => {
+            res.status(200).json(data)
+        }).catch((err) => {
+            res.status(500).json(err)
+        })
+
+    },
+
     editProfile: function(req, res) {
         if(req.body.password) {
             user.update({
