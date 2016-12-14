@@ -35,7 +35,7 @@ module.exports = {
                 subject = "Forgot Password"
                 content = new helper.Content(
                     "text/html",
-                    `<a href=${BASE_URL}/api/verify_request_password/${data.password}>
+                    `<a href=${BASE_URL}/api/forgot_password/verify_request_password/${data.password}>
                         Click here to reset your password
                     </a>`
                 )
