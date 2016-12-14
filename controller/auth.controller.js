@@ -57,13 +57,12 @@ module.exports = {
       user.update({
         avatar: req.body.avatar
       }, {
-        fields: ['avatar'],
         where: {id: req.params.id}
-      }).then(()=> {
-        res.status(200)
+      }).then((data)=> {
+        res.status(200).json(data)
       }).catch((err)=> {
         console.log(err);
-        res.status(500)
+        res.status(500).json(err)
       })
 
     },
@@ -75,11 +74,11 @@ module.exports = {
                 password: crypto.createHash('md5').update(req.body.password).digest("hex")
             }, {
                 where: {id: req.params.id}
-            }).then(()=> {
-                res.status(200)
+            }).then((data)=> {
+                res.status(200).json(data)
             }).catch((err)=> {
                 console.log(err);
-                res.status(500)
+                res.status(500).json(err)
             })
         }
         else {
@@ -87,11 +86,11 @@ module.exports = {
                 avatar: req.body.avatar
             }, {
                 where: {id: req.params.id}
-            }).then(()=> {
-                res.status(200)
+            }).then((data)=> {
+                res.status(200).json(data)
             }).catch((err)=> {
                 console.log(err);
-                res.status(500)
+                res.status(500).json(err)
             })
         }
 
