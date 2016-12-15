@@ -1,10 +1,11 @@
 {
     "development": {
-        "username": "postgres",
+        "username": "hacktiv8-10",
         "password": "password",
         "database": "brtr_dev",
         "host": "127.0.0.1",
-        "dialect": "postgres"
+        "dialect": "postgres",
+        "logging": false
     },
     "test": {
         "username": "postgres",
