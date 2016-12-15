@@ -24,7 +24,10 @@ module.exports = {
                 }
             ],
             where: {
-                CategoryId: req.params.CategoryId
+                CategoryId: req.params.CategoryId,
+                status: {
+                    $ne: 'deleted'
+                }
             }
         }).then((data) => {
             res.status(200).json(data)
