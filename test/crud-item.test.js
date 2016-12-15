@@ -154,14 +154,22 @@ describe("Test Items Model", function() {
     describe("Delete an Item", () => {
         it('it should DELETE an item', (done) => {
             Item.create(new_item).then((item) => {
-                Item.destroy({
-                    where: {
-                        id: item.id
-                    }
-                }).then((data) => {
-                    expect(data).to.equal(1)
-                    done()
+              Item.update({
+                  status: 'deleted'
+              }, {
+                  where: {
+                      id: item.id
+                  }
+              }).then((data) => {
+                Item.findOne({
+                  where: {
+                    name: new_item.name
+                  }
+                }).then((new_data) => {
+                  expect(new_data.status).to.be.equal('deleted')
+                  done()
                 })
+              })
             })
         })
     })
@@ -353,11 +361,10 @@ describe("Test Items API", function() {
                     })
                     .end((err, res) => {
                         chai.request(urlApi)
-                            .delete(`/items/${item.id}`)
+                            .put(`/items/delete/${item.id}`)
                             .set({ authorization: `Bearer ${res.body}` })
                             .end((err, response) => {
                                 expect(response).to.have.status(200)
-                                expect(response.body.message).to.equal('data is deleted!')
                                 expect(response.body.data).to.equal(1)
                                 done()
                             })
