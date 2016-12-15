@@ -17,7 +17,7 @@ describe("Test for forgot password", () => {
     describe("Send request for reset password", () => {
         it("Expect to send request to reset password", (done) => {
             chai.request(urlApi)
-                .get('/forgot_password')
+                .post('/forgot_password')
                 .send({
                     email: 'dharmadi93@gmail.com'
                 })

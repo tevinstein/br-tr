@@ -365,7 +365,7 @@ describe("Test Items API", function() {
                             .set({ authorization: `Bearer ${res.body}` })
                             .end((err, response) => {
                                 expect(response).to.have.status(200)
-                                expect(response.body.data).to.equal(1)
+                                expect(response.body.data).to.eql([1])
                                 done()
                             })
                     })
