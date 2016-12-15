@@ -1,9 +1,9 @@
 {
     "development": {
-        "username": "hacktiv8-10",
-        "password": "password",
-        "database": "brtr_dev",
-        "host": "127.0.0.1",
+        "username": "brtrbrtr",
+        "password": "brtrbrtr",
+        "database": "ebdb",
+        "host": "aanywsazhtbe61.cq2o6iqmadcp.ap-southeast-1.rds.amazonaws.com",
         "dialect": "postgres",
         "logging": false
     },
