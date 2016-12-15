@@ -9,7 +9,6 @@ var jwt = require('express-jwt');
 router.get('/', jwt({secret: process.env.JWT_SECRET}), itemController.getAllItem)
 router.get('/search/:name', jwt({secret: process.env.JWT_SECRET}), itemController.getItemByName)
 router.get('/user/:UserId', jwt({secret: process.env.JWT_SECRET}), itemController.getItemByUserId)
-router.get('/deleted', jwt({secret: process.env.JWT_SECRET}), itemController.getDeletedItem)
 router.post('/', jwt({secret: process.env.JWT_SECRET}), itemController.postItem)
 router.get('/:id', jwt({secret: process.env.JWT_SECRET}), itemController.getItem)
 router.put('/:id', jwt({secret: process.env.JWT_SECRET}), itemController.editItem)
