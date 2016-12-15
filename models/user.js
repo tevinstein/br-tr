@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
                         return next(error);
                     } else if (user) {
                         console.log('username has been used');
-                        return next({message: 'username has been used'});
+                        return next('username has been used');
                     } else {
                         next();
                     }
@@ -28,6 +28,24 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         validate: {
             isEmail: true
+        },
+        isUnique: (value, next) => {
+            User.find({
+                where: {
+                    username: value
+                },
+                attributes: ['id']
+            }).done((error, user) => {
+                if (error) {
+                    console.log('error unique: ', error);
+                    return next(error);
+                } else if (user) {
+                    console.log('email has been used');
+                    return next('email has been used');
+                } else {
+                    next();
+                }
+            });
         }
     },
     password: DataTypes.STRING,
