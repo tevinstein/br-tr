@@ -21,7 +21,7 @@ describe("Test for read all messages", () => {
                 .post('/auth/login')
                 .end((err, res) => {
                     chai.request(urlApi)
-                        .get('/messages')
+                        .get('/messages/itemMessage')
                         .end((err, res) => {
                             expect(res).to.have.status(401)
                             done()
@@ -36,7 +36,7 @@ describe("Test for read all messages", () => {
                 .post('/auth/login')
                 .end((err, res) => {
                     chai.request(urlApi)
-                        .get('/messages')
+                        .get('/messages/itemMessage')
                         .set({authorization: `Bearer ${res.body}`})
                         .end((err, res) => {
                             expect(res).to.have.status(401)
@@ -56,7 +56,7 @@ describe("Test for read all messages", () => {
                 })
                 .end((err, res) => {
                     chai.request(urlApi)
-                        .get('/messages')
+                        .get('/messages/itemMessage')
                         .set({authorization: `Bearer ${res.body}`})
                         .end((err, res) => {
                             expect(res).to.have.status(401)
@@ -76,21 +76,19 @@ describe("Test for read all messages", () => {
                 })
                 .end((err, res) => {
                     chai.request(urlApi)
-                        .get('/messages')
+                        .get('/messages/itemMessage/all')
                         .set({authorization: `Bearer ${res.body}`})
 
                         .end((err, res) => {
                             expect(res).to.have.status(200)
                             expect(res.body).that.is.an('array')
                             expect(res.body[0]).to.haveOwnProperty('id')
-                            expect(res.body[0]).to.haveOwnProperty('TempMessageId')
-                            expect(res.body[0]).to.haveOwnProperty('ItemMessageId')
-                            expect(res.body[0]).to.haveOwnProperty('UserId')
-                            expect(res.body[0]).to.haveOwnProperty('body')
-                            expect(res.body[0]).to.haveOwnProperty('status')
+                            expect(res.body[0]).to.haveOwnProperty('BarteredItemId')
+                            expect(res.body[0]).to.haveOwnProperty('ItemId')
+                            expect(res.body[0]).to.haveOwnProperty('Item')
+                            expect(res.body[0]).to.haveOwnProperty('title')
                             expect(res.body[0]).to.haveOwnProperty('createdAt')
                             expect(res.body[0]).to.haveOwnProperty('updatedAt')
-                            expect(res.body.length).to.equal(2)
                             done()
                         })
                 })
