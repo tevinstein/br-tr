@@ -92,7 +92,10 @@ module.exports = {
                 }
             ],
             where: {
-                UserId: req.params.UserId
+                UserId: req.params.UserId,
+                status: {
+                    $ne: 'deleted'
+                }
             }
         }).then((data) => {
             res.status(200).json(data)
