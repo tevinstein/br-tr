@@ -35,9 +35,14 @@ module.exports = {
                 subject = "Forgot Password"
                 content = new helper.Content(
                     "text/html",
-                    `<a href=${BASE_URL}/api/forgot_password/verify_request_password/${data.password}>
-                        Click here to reset your password
-                    </a>`
+                    `
+                    <div style="text-align:center; background-color:black; padding:50px">
+                      <img src='http://i.imgur.com/5KBXgFb.png' alt='brtr'/><br/><br/>
+                      <form action="${BASE_URL}/api/forgot_password/verify_request_password/${data.password}">
+                        <input type="submit" value="Click here to reset your password" />
+                    </form>
+                    </div>
+                  `
                 )
                 mail = new helper.Mail(from_email, subject, to_email, content)
 
@@ -88,7 +93,7 @@ module.exports = {
                             email: data.email
                         }
                     }).then((data) => {
-                        res.status(200).json(newPassHash)
+                        res.status(200).json('Redirecting.. Your new password will be ready in a few seconds..')
                     }).catch((err) => {
                         res.status(500).json(err)
                     })
