@@ -45,7 +45,10 @@ module.exports = {
             ],
             where: {
                 ItemMessageId: req.params.ItemMessageId
-            }
+            },
+            order: [
+                ['createdAt', 'ASC'],
+            ]
         }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
